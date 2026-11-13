@@ -1,0 +1,17 @@
+# Data is downloaded by notebook 01, not committed
+data/*
+!data/README.md
+
+# Secrets
+.env
+
+# Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
