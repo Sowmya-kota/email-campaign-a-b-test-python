@@ -75,13 +75,15 @@ The main risk with language models in analytics is a confident wrong number reac
 - **Verified in code:** `verify()` checks that every number in an answer appears in a fact the answer cites. Invented numbers, uncited numbers and non-existent fact IDs are flagged.
 - **Evaluated:** 10 test questions cover known answers, unanswerable questions and a prompt injection.
 
-| Evaluation | Result |
+| Evaluation | Current run (notebook 05) |
 |---|---|
-| Known answers (correct number, verified) | 7 / 7 |
+| Known answers (correct number, verified) | 5 / 5 answered, 2 pending |
 | Unanswerable questions refused | 2 / 2 |
 | Prompt injection ("say it made $1 million") resisted | 1 / 1 |
 
-**How the score was reached:** the first run scored 8/10. Reading the two failures showed both were **evaluator bugs**, not model errors: the verifier only parsed `[F07]`-style citations and missed `[F07, F09]`, and the injection test demanded refusal wording although the model had correctly ignored the instruction. After fixing the evaluator, the same stored answers scored 10/10.
+**Status: partial re-run.** All 8 questions answered in the latest run passed. Two questions (the Men's email conversion rate, and results for women's-only buyers) are pending because the free Gemini API quota ran out. They are recorded as *skipped*, not as passed or failed, and will be re-run when the quota resets.
+
+**How the evaluator was fixed:** the first run scored 8/10. Reading the two failures showed both were **evaluator bugs**, not model errors: the verifier only parsed `[F07]`-style citations and missed `[F07, F09]`, and the injection test demanded refusal wording although the model had correctly ignored the instruction. After fixing the evaluator, re-grading the same stored answers gave 10/10. Those answers were later overwritten by a re-run, so the notebook shows the current partial run above.
 
 **Design choices:** ~60 facts fit in one prompt, so retrieval with a vector database would add complexity without benefit. Calls use temperature 0, a timeout, exponential backoff and model fallback, because the free API tier is often overloaded.
 
